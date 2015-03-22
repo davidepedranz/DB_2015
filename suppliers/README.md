@@ -9,12 +9,12 @@
 ``` sql
 SELECT DISTINCT s.sname
 FROM parts p NATURAL JOIN catalog c NATURAL JOIN suppliers s
-WHERE p.color = 'red'a
+WHERE p.color = 'red'
 ```
 
 **2. Find the sids of suppliers who supply some red or green part**
 ``` sql
-SELECT DISTINCT s.sid
+SELECT DISTINCT c.sid
 FROM parts p NATURAL JOIN catalog c
 WHERE p.color = 'red' OR p.color = 'green'
 ```
@@ -23,7 +23,7 @@ WHERE p.color = 'red' OR p.color = 'green'
 ```sql
 SELECT DISTINCT s.sid
 FROM parts p NATURAL JOIN catalog c NATURAL JOIN suppliers s
-WHERE p.color = 'red' OR s.address = 'Address X', 
+WHERE p.color = 'red' OR s.address = 'Address X'
 ```
 
 **4. Find the sids of suppliers who supply some red part and some green part**
@@ -69,7 +69,7 @@ WHERE NOT EXISTS ( SELECT *
                    WHERE p.color = 'red'
                    AND NOT EXISTS ( SELECT *
                                     FROM catalog c1
-                                    WHERE C1.sid = C.sid AND C1.pid = p.pid ))
+                                    WHERE c.sid = c1.sid AND p.pid = c1.pid ))
 ```
 
 **7. Find the sids of suppliers who supply every red and every green part**
@@ -81,7 +81,7 @@ WHERE NOT EXISTS ( SELECT *
                    WHERE (p.color = 'red' OR p.color = 'green')
                    AND NOT EXISTS ( SELECT *
                                     FROM catalog c1
-                                    WHERE C1.sid = C.sid AND C1.pid = p.pid ))
+                                    WHERE c.sid = c1.sid AND p.pid = c1.pid ))
 ```
 
 **8. Find the sids of suppliers who supply every red or supply every green part**
@@ -93,24 +93,24 @@ WHERE NOT EXISTS ( SELECT *
                    WHERE p.color = 'red'
                    AND NOT EXISTS ( SELECT *
                                     FROM catalog c1
-                                    WHERE C1.sid = C.sid AND C1.pid = p.pid ))
+                                    WHERE c.sid = c1.sid AND p.pid = c1.pid ))
 OR NOT EXISTS ( SELECT *
                 FROM parts p
                 WHERE p.color = 'green'
                 AND NOT EXISTS ( SELECT *
                                  FROM catalog c1
-                                 WHERE C1.sid = C.sid AND C1.pid = p.pid ))
+                                 WHERE c.sid = c1.sid AND p.pid = c1.pid ))
 ```
 **9. Find pairs of sids such that the supplier with the first sid charges more for some part than the supplier with the second sid**
 ```sql
-SELECT C1.sid AS sid1, C2.sid AS sid2
-FROM catalog C1, catalog C2
-WHERE C1.cost > C2.cost
+SELECT c1.sid AS sid1, c1.sid AS sid2
+FROM catalog c1, catalog c1
+WHERE c1.cost > c2.cost
 ```
 
 **10. Find the pids of parts supplied by at least two different suppliers**
 ```sql
-SELECT DISTINCT c.pid
+SELECT DISTINCT c1.pid
 FROM catalog c1
 WHERE 2 <= ( SELECT COUNT(*)
              FROM catalog c2
@@ -135,7 +135,7 @@ WHERE NOT EXISTS ( SELECT *
                                       WHERE c.pid = p.pid AND c.sid = s.sid ))
 ```
 
-**13. Find the pids of parts supplied by every supplier at less then $200. (If any supplier either does not supply the part or charges more than $200 for it, the part is not selected.)**
+**13. Find the pids of parts supplied by every supplier at less then 100. (If any supplier either does not supply the part or charges more than 100 for it, the part is not selected.)**
 ``` sql
 SELECT p.pid
 FROM parts p
@@ -145,4 +145,3 @@ WHERE NOT EXISTS ( SELECT *
                                       FROM catalog c
                                       WHERE c.pid = p.pid AND c.sid = s.sid AND c.cost < 100))
 ```
-
