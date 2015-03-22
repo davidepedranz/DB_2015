@@ -142,7 +142,7 @@ WHERE 2 <= ( SELECT COUNT(*)
              WHERE c2.pid = c1.pid );
 ```
 
-**11. Find the pids of the most expensive parts supplied by suppliers named Yosemite Sham**
+**11. Find the pids of the most expensive parts supplied by suppliers named 'All red'**
 ```sql
 SELECT DISTINCT c.pid
 FROM catalog c NATURAL JOIN suppliers s
