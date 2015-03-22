@@ -1,4 +1,4 @@
-# Databases - Univertity of Trento - spring 2015
+# Databases 2015 - Univertity of Trento
 This repository contains some exercises given in the Databases class at the University of Trento (Italy)
 in the spring semester 2015. Following a description of the exercises.
 
