@@ -69,7 +69,8 @@ CATALOG_NUMBER = 60
 
 # random fields
 s_names = ['Ale', 'Pietro', 'Pippo', 'Gino', 'Alice', 'Francesca', 'Geltrude', 'Mario', 'Fede', 'Alex', 'Titti']
-s_addresses = ['Via Rossi 34', 'Viale Verona 34', 'Sulla montagna', 'Somewhere', 'Ocean', 'Everest', 'On the way']
+s_second_names = ['Rossi', 'Bianchi', 'Blu', 'Cognome', 'Random', 'Robot', 'Chess', 'Sacchi', 'Spider', 'Monello']
+s_addresses = ['Via Rossi', 'Viale Verona', 'Sulla montagna', 'Somewhere', 'Ocean', 'Everest', 'On the way']
 p_names = ['books', 'chips', 'objects', 'videos', 'things', 'cose', 'cars', 'universities', 'computers', 'phones']
 p_colors = ['white', 'black', 'green', 'red', 'yellow', 'blue', 'violet', 'orange', 'purple', 'grey']
 c_costs = [12, 34, 56, 101, 1, 23, 99, 22, 111, 77, 34, 17, 34]
@@ -81,7 +82,9 @@ parts_list = []
 # insert suppliers
 for i in range(SUPPLIERS_NUMBER):
 	# NB: sid added automatically
-	s = Suppliers(sname=random.choice(s_names), address=random.choice(s_addresses))
+	name = random.choice(s_names) + ' ' + random.choice(s_second_names)
+	address = random.choice(s_addresses) + ' ' + str(random.randint(1, 10))
+	s = Suppliers(sname=name, address=address)
 	session.add(s)
 	suppliers_list.append(s)
 
