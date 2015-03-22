@@ -119,7 +119,9 @@ WHERE 2 <= ( SELECT COUNT(*)
 
 **11. Find the pids of the most expensive parts supplied by suppliers named Yosemite Sham**
 ```sql
-TODO
+SELECT DISTINCT c.pid
+FROM catalog c NATURAL JOIN suppliers s
+WHERE s.sname='All red' AND c.cost = (SELECT MAX(c1.cost) FROM catalog c1)
 ```
 
 **12. Find the pids of parts supplied by every supplier at less then $200. (If any supplier either does not supply the part or charges more than $200 for it, the part is not selected.)**
