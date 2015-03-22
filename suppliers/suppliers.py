@@ -64,7 +64,7 @@ session = DBSession()
 
 # parameters
 SUPPLIERS_NUMBER = 46
-PARTS_NUMBER = 500
+PARTS_NUMBER = 498
 CATALOG_NUMBER = 1000 
 
 # random fields
@@ -73,7 +73,9 @@ s_second_names = ['Rossi', 'Bianchi', 'Blu', 'Cognome', 'Random', 'Robot', 'Ches
 s_addresses = ['Via Rossi', 'Viale Verona', 'Sulla montagna', 'Somewhere', 'Ocean', 'Everest', 'On the way']
 p_names = ['books', 'chips', 'objects', 'videos', 'things', 'cose', 'cars', 'universities', 'computers', 'phones']
 p_colors = ['white', 'black', 'green', 'red', 'yellow', 'blue', 'violet', 'orange', 'purple', 'grey', 'light blue', 'pink']
-c_costs = [12, 34, 56, 101, 1, 23, 99, 22, 111, 77, 34, 17, 34]
+c_costs_small = [12, 34, 56, 77, 89, 95]
+c_costs_big = [102, 152, 166, 177, 189, 200]
+c_costs = c_costs_small + c_costs_big
 
 # store elements -> to easily add catalog
 suppliers_list = []
@@ -108,34 +110,61 @@ for i in range(CATALOG_NUMBER):
 	session.add(c)
 
 ## insert a supplier who supply every part
-## insert a supplier who supply every red part
-## insert a supplier who supply every green part
-## insert a supplier who supply every green and red part
 supplier_all_parts = Suppliers(sname='All part', address='Address X')
-supplier_all_red = Suppliers(sname='All red', address='Address X')
-supplier_all_green = Suppliers(sname='All green', address='Address X')
-supplier_all_red_and_green = Suppliers(sname='All red and green', address='Address X')
-
 session.add(supplier_all_parts)
-session.add(supplier_all_red)
-session.add(supplier_all_green)
-session.add(supplier_all_red_and_green)
+suppliers_list.append(supplier_all_parts)
 
+## insert a supplier who supply every red part
+supplier_all_red = Suppliers(sname='All red', address='Address X')
+session.add(supplier_all_red)
+suppliers_list.append(supplier_all_red)
+
+## insert a supplier who supply every green part
+supplier_all_green = Suppliers(sname='All green', address='Address X')
+session.add(supplier_all_green)
+suppliers_list.append(supplier_all_green)
+
+## insert a supplier who supply every green and red part
+supplier_all_red_and_green = Suppliers(sname='All red and green', address='Address X')
+session.add(supplier_all_red_and_green)
+suppliers_list.append(supplier_all_red_and_green)
+
+## insert a part supplied by every supplier
+part_all_suppliers = Parts(pname='Every supplier', color='special')
+session.add(part_all_suppliers)
+parts_list.append(part_all_suppliers)
+
+## insert a part supplied by every supplier at less than 100
+part_all_suppliers_less_100 = Parts(pname='Every supplier less 100', color='special')
+session.add(part_all_suppliers_less_100)
+parts_list.append(part_all_suppliers_less_100)
+
+# supply every part
 for pp in parts_list:
-	c = Catalog(cost=random.choice(c_costs), supplier=supplier_all_parts, part=pp)
+	if pp != part_all_suppliers and pp != part_all_suppliers_less_100:
+
+		c = Catalog(cost=random.choice(c_costs), supplier=supplier_all_parts, part=pp)
+		session.add(c)
+
+		if pp.color == 'red':
+			c = Catalog(cost=random.choice(c_costs), supplier=supplier_all_red, part=pp)
+			session.add(c)
+			c1 = Catalog(cost=random.choice(c_costs), supplier=supplier_all_red_and_green, part=pp)
+			session.add(c1)
+
+		if pp.color == 'green':
+			c = Catalog(cost=random.choice(c_costs), supplier=supplier_all_green, part=pp)
+			session.add(c)
+			c1 = Catalog(cost=random.choice(c_costs), supplier=supplier_all_red_and_green, part=pp)
+			session.add(c1)
+
+# supplied by every supplier
+for ss in suppliers_list:
+	c = Catalog(cost=random.choice(c_costs), supplier=ss, part=part_all_suppliers)
 	session.add(c)
 
-	if pp.color == 'red':
-		c = Catalog(cost=random.choice(c_costs), supplier=supplier_all_red, part=pp)
-		session.add(c)
-		c1 = Catalog(cost=random.choice(c_costs), supplier=supplier_all_red_and_green, part=pp)
-		session.add(c1)
-
-	if pp.color == 'green':
-		c = Catalog(cost=random.choice(c_costs), supplier=supplier_all_green, part=pp)
-		session.add(c)
-		c1 = Catalog(cost=random.choice(c_costs), supplier=supplier_all_red_and_green, part=pp)
-		session.add(c1)
+	c1 = Catalog(cost=random.choice(c_costs_small), supplier=ss, part=part_all_suppliers_less_100)
+	session.add(c1)
 
 # write to db
 session.commit()
