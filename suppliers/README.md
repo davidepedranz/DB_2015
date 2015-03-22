@@ -124,7 +124,19 @@ FROM catalog c NATURAL JOIN suppliers s
 WHERE s.sname='All red' AND c.cost = (SELECT MAX(c1.cost) FROM catalog c1)
 ```
 
-**12. Find the pids of parts supplied by every supplier at less then $200. (If any supplier either does not supply the part or charges more than $200 for it, the part is not selected.)**
+**12. Find all fields of parts supplied by every supplier**
+``` sql
+SELECT *
+FROM parts p
+WHERE NOT EXISTS ( SELECT *
+                   FROM suppliers s
+                   WHERE NOT EXISTS (	SELECT *
+                                      FROM catalog c
+                                      WHERE c.pid = p.pid AND c.sid = s.sid ))
+```
+
+**13. Find the pids of parts supplied by every supplier at less then $200. (If any supplier either does not supply the part or charges more than $200 for it, the part is not selected.)**
 ``` sql
 TODO
 ```
+
