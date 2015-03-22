@@ -1,3 +1,10 @@
+##Schema
+ * Suppliers (**sid: integer**, sname: string, address: string)
+ * Parts (**pid: integer**, pname: string, color: string)
+ * Catalog (**sid: integer, pid: integer**, cost: real)
+
+## Questions
+
 **1. Find the names of suppliers who supply some red part**
 ``` sql
 SELECT DISTINCT s.sname
