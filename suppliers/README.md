@@ -41,3 +41,26 @@ WHERE p.color = 'red' OR s.adress = 'Address X',
                                       FROM parts p NATURAL JOIN catalog c
                                       WHERE p.color = 'green')
   ```
+
+**5. Find the sids of suppliers who supply every part
+```sql
+SELECT DISTINCT c.sid
+FROM catalog c
+WHERE NOT EXISTS ( SELECT *
+                   FROM parts p
+                   WHERE NOT EXISTS ( SELECT *
+                                      FROM catalog c1
+                                      WHERE C1.sid = C.sid AND C1.pid = p.pid ))
+```
+
+**6. Find the sids of suppliers who supply every red part
+```sql
+SELECT DISTINCT c.sid
+FROM catalog c
+WHERE NOT EXISTS ( SELECT *
+                   FROM parts p
+                   WHERE p.color = 'red'
+                   AND NOT EXISTS ( SELECT *
+                                    FROM catalog c1
+                                    WHERE C1.sid = C.sid AND C1.pid = p.pid ))
+```
