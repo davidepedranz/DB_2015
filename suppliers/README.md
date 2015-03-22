@@ -1,15 +1,15 @@
-#Schema
+##Schema
  * Suppliers (**sid: integer**, sname: string, address: string)
  * Parts (**pid: integer**, pname: string, color: string)
  * Catalog (**sid: integer, pid: integer**, cost: real)
 
-# Questions
+## Questions
 
 **1. Find the names of suppliers who supply some red part**
 ``` sql
 SELECT DISTINCT s.sname
 FROM parts p NATURAL JOIN catalog c NATURAL JOIN suppliers s
-WHERE p.color = 'red'
+WHERE p.color = 'red'a
 ```
 
 **2. Find the sids of suppliers who supply some red or green part**
@@ -23,7 +23,7 @@ WHERE p.color = 'red' OR p.color = 'green'
 ```sql
 SELECT DISTINCT s.sid
 FROM parts p NATURAL JOIN catalog c NATURAL JOIN suppliers s
-WHERE p.color = 'red' OR s.adress = 'Address X', 
+WHERE p.color = 'red' OR s.address = 'Address X', 
 ```
 
 **4. Find the sids of suppliers who supply some red part and some green part**
@@ -115,4 +115,14 @@ FROM catalog c1
 WHERE 2 <= ( SELECT COUNT(*)
              FROM catalog c2
              WHERE c2.pid = c1.pid )
+```
+
+**11. Find the pids of the most expensive parts supplied by suppliers named Yosemite Sham**
+```sql
+TODO
+```
+
+**12. Find the pids of parts supplied by every supplier at less then $200. (If any supplier either does not supply the part or charges more than $200 for it, the part is not selected.)**
+``` sql
+TODO
 ```
