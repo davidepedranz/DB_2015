@@ -142,11 +142,29 @@ WHERE 2 <= ( SELECT COUNT(*)
              WHERE c2.pid = c1.pid );
 ```
 
-**11. Find the pids of the most expensive parts supplied by suppliers named 'All red'**
+**11a. Find the pids of the most expensive parts (in absolute) which are supplied by suppliers named 'All red'**
 ```sql
 SELECT DISTINCT c.pid
 FROM catalog c NATURAL JOIN suppliers s
 WHERE s.sname='All red' AND c.cost = (SELECT MAX(c1.cost) FROM catalog c1);
+```
+
+**11b. Find the pids of the most expensive parts supplied by suppliers named 'All red' (most expensive parts between all parts supplied by every supplier named 'All red'**
+```sql
+SELECT DISTINCT c1.pid
+FROM catalog c1 NATURAL JOIN suppliers s1
+WHERE s1.sname='All red' AND c1.cost = ( SELECT MAX(c2.cost)
+										 FROM catalog c2 NATURAL JOIN suppliers s2
+										 WHERE s2.sname='All red' );
+```
+
+**11c. Find the pids of the most expensive parts for every suppliers named 'All red'**
+```sql
+SELECT c1.sid, c1.pid
+FROM catalog c1 NATURAL JOIN ( SELECT s.sid, MAX(c.cost) AS cost
+							   FROM suppliers s NATURAL JOIN catalog c
+							   WHERE s.sname = 'All red'
+							   GROUP BY s.sid );
 ```
 
 **12. Find all fields of parts supplied by every supplier**
@@ -162,7 +180,13 @@ WHERE NOT EXISTS ( SELECT *
 
 **13. Find the pids of parts supplied by every supplier at less then 100. (If any supplier either does not supply the part or charges more than 100 for it, the part is not selected.)**
 ``` sql
-SELECT p.pid
+SELECT p.pidSELECT c1.sid, c1.pid
+FROM catalog c1 NATURAL JOIN (
+				 SELECT s.sid, MAX(c.cost) AS cost
+				 FROM suppliers s NATURAL JOIN catalog c
+				 WHERE s.sname = 'All red'
+				 GROUP BY s.sid
+			     );
 FROM parts p
 WHERE NOT EXISTS ( SELECT *
                    FROM suppliers s
