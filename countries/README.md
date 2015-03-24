@@ -75,3 +75,33 @@ FROM language l NATURAL JOIN population p
 WHERE p.death_rate - p.birth_rate > 0
 GROUP BY l.language
 ```
+
+**9. Consider the following hypothesis: the top 10 countries in terms of percentage of their elderly population are among the richest 20% (in terms of GDP per capita). Write an SQL query that checks if the hypotesis is true (if it is true, the ouput must contain those 10 countries).**
+```sql
+TODO
+```
+
+**10. The same for the hypothesis: 80% of the world population live in countries that are among the poorest 20%. The output should be 'yes' or 'no'.**
+```sql
+TODO
+```
+
+**11. List all the countries that belong to the top 10 in terms of both of the following criteria: the percentage of people in poverty and GDP per capita.**
+```sql
+SELECT *
+FROM
+
+/* top 10 by gdp */
+(SELECT e.country
+FROM economy e NATURAL JOIN population p
+ORDER BY e.gdp / p.population DESC
+LIMIT 10)
+
+NATURAL JOIN
+
+/* top 10 by poverty */
+(SELECT e.country
+FROM economy e
+ORDER BY e.poverty_rate DESC
+LIMIT 10)
+```
