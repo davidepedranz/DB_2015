@@ -34,3 +34,44 @@ FROM language l NATURAL JOIN economy e
 GROUP BY l.country
 HAVING COUNT(*) = (SELECT MAX(count) FROM (SELECT COUNT(*) AS count FROM language l GROUP BY l.country))
 ```
+
+**5. Find all countries where English is the dominant language, and the poverty rate is higher than that of Italy.**
+```sql
+SELECT l.country
+FROM language l NATURAL JOIN economy e
+WHERE l.language = 'English'AND l.percentage > 50
+AND e.poverty_rate > (SELECT poverty_rate FROM economy WHERE country = 'IT')
+```
+
+**6. Find the country with the fastest declining population (that is the maximum death_rate - birth_rate).**
+```sql
+SELECT *
+FROM population
+ORDER BY death_rate - birth_rate DESC
+LIMIT 1
+```
+
+**7. For each language, find the percentage of the world population that speaks it.**
+```sql
+SELECT l.language, SUM(p.population * l.percentage) / (SELECT SUM(population) FROM population) AS global_percentage
+FROM language l NATURAL JOIN population p
+GROUP BY l.language
+```
+
+Willo version:
+```sql
+SELECT language, SUM(tot) / (SELECT SUM(population) FROM population) AS global_percentage
+FROM (SELECT l.language, l.percentage * p.population AS tot
+      FROM language l NATURAL JOIN population p )
+GROUP BY language
+```
+
+**8. Same as (7), but restricted to countries whose population is declining.**
+```sql
+SELECT l.language, (SUM(p.population * l.percentage) / ( SELECT SUM(population) 
+											             FROM population
+												         WHERE death_rate - birth_rate > 0)) AS declining_percentage
+FROM language l NATURAL JOIN population p
+WHERE p.death_rate - p.birth_rate > 0
+GROUP BY l.language
+```
