@@ -1,3 +1,40 @@
+## Schema
+ * Country (**code**, name, capital, area)
+ * Population (**country**, population, children, adult, birth_rate, death_rate, sex_ratio)
+ * Economy (**country**, gdp, inflation, military, poverty_rate)
+ * Language (**country, language**, percentage)
+
+**Table Country:**
+ * code (key)
+ * name
+ * capital
+ * area
+
+**Table Population:**
+ * country (refers to country code)
+ * population (total population)
+ * children (percentage of children, defined as those aged 0 to 14)
+ * adult (likewise for adults, defined as people between 15 and 64)
+ * birth_rate
+ * death_rate
+ * sex_ratio (male/female)
+
+**Table Economy:**
+ * country (refers to country code)
+ * gdp (gross domestic product)
+ * inflation (annual inflation rate)
+ * military (military spending as percentage of the gdp)
+ * poverty_rate (percentage of population below the poverty line)
+
+**Table Language:**
+ * country (refers to country code)
+ * language
+ * percentage (percentage of population speaking the language)
+
+**Constains:**
+ * Code is a key for Country (name need not be a key)
+ * Country is a key for Population adn Economy but not necessarily for Language
+
 ##Questions
 
 **1. Find the percentage of elderly population (65 and over) int the country with the highest GDP.**
