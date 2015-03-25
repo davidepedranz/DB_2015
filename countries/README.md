@@ -105,3 +105,60 @@ FROM economy e
 ORDER BY e.poverty_rate DESC
 LIMIT 10)
 ```
+
+**12. Assume that all the countries stop military spending, and distribuite the money back to their citizens. Find the average, maximum, and minimum increase of GDP per capita due to this action. For the minumum and maximum, also list the country (countries)**
+```sql
+/** max increase and countries **/
+SELECT e.country, e.gdp * e.military / p.population / 100 AS increase
+FROM economy e NATURAL JOIN population p
+WHERE increase = ( SELECT MAX(gdp * military / population / 100) AS max_increase
+				   FROM economy NATURAL JOIN population )
+```
+```sql
+/** min increase and countries **/
+SELECT e.country, e.gdp * e.military / p.population / 100 AS increase
+FROM economy e NATURAL JOIN population p
+WHERE increase = ( SELECT MIN(gdp * military / population / 100) AS min_increase
+				   FROM economy NATURAL JOIN population )
+```
+```sql   
+/** average **/
+SELECT AVG(e.gdp * e.military / p.population / 100) AS average_increase
+FROM economy e NATURAL JOIN population p
+```
+
+**13. Order languages by the average percentage of the adult population of countries in which they are spoken by at least 25% of the population (in decreasing order).**
+```sql
+SELECT l.language, AVG(p.adult) AS adult_average
+FROM language l NATURAL JOIN population p
+WHERE l.percentage > 25
+GROUP BY l.language
+ORDER BY AVG(p.adult) DESC
+```
+
+**14. Find the richest (highest GDP) , the poorest (lowest GDP), the most populus, and the largest country whose name starts with a 'C'.**
+```sql
+SELECT *
+FROM
+
+	/** richest **/
+	(SELECT e.country AS richest
+	FROM country c JOIN economy e ON c.code=e.country
+	WHERE c.name LIKE 'C%'
+	ORDER BY e.gdp DESC
+	LIMIT 1),
+
+	/** poorest **/
+	(SELECT e.country AS poorest
+	FROM country c JOIN economy e ON c.code=e.country
+	WHERE c.name LIKE 'C%'
+	ORDER BY e.gdp ASC
+	LIMIT 1),
+
+	/** most populus **/
+	(SELECT p.country AS most_populus
+	FROM country c JOIN population p ON c.code=p.country
+	WHERE c.name LIKE 'C%'
+	ORDER BY p.population DESC
+	LIMIT 1)
+```
