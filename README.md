@@ -11,3 +11,11 @@ The folder [suppliers](suppliers) contains:
   * a python script to create the schema and insert dummy data
   * the sqlite database generated runnning the script
   * a markdown file containing the questions with a possible answer
+
+## Countries
+A more advanced exercise on SQL.
+
+The folder [countries](countries) contains:
+  * a python script to create the schema and insert dummy data
+  * the sqlite database generated runnning the script
+  * a markdown file containing the questions with a possible answer
