@@ -137,6 +137,32 @@ ORDER BY AVG(p.adult) DESC
 ```
 
 **14. Find the richest (highest GDP) , the poorest (lowest GDP), the most populus, and the largest country whose name starts with a 'C'.**
+
+```sql
+/** richest **/
+SELECT e.country AS richest
+FROM country c JOIN economy e ON c.code=e.country
+WHERE c.name LIKE 'C%' AND e.gdp = ( SELECT MAX(e1.gdp)
+									 FROM country c1 JOIN economy e1 ON c1.code=e1.country
+									 WHERE c1.name LIKE 'C%' )
+```
+```sql
+/** poorest **/
+SELECT e.country AS poorest
+FROM country c JOIN economy e ON c.code=e.country
+WHERE c.name LIKE 'C%' AND e.gdp = ( SELECT MIN(e1.gdp)
+									 FROM country c1 JOIN economy e1 ON c1.code=e1.country
+									 WHERE c1.name LIKE 'C%' )
+```
+```sql
+SELECT p.country AS most_populus
+FROM country c JOIN population p ON c.code=p.country
+WHERE c.name LIKE 'C%' AND p.population = ( SELECT p1.population
+											FROM country c1 JOIN population p1 ON c1.code=p1.country
+											WHERE c1.name LIKE 'C%' )
+```
+
+Assuming there is only one richest, one poorest and one most populus...
 ```sql
 SELECT *
 FROM
