@@ -4,6 +4,46 @@
  * Economy (**country**, gdp, inflation, military, poverty_rate)
  * Language (**country, language**, percentage)
 
+```sql
+CREATE TABLE country (
+	code VARCHAR(2), 
+	name VARCHAR(80) NOT NULL, 
+	capital INTEGER, 
+	area INTEGER, 
+	PRIMARY KEY (code)
+);
+
+CREATE TABLE economy (
+	country VARCHAR(2), 
+	gdp FLOAT, 
+	inflation FLOAT, 
+	military FLOAT, 
+	poverty_rate FLOAT, 
+	PRIMARY KEY (country), 
+	FOREIGN KEY(country) REFERENCES country (code)
+);
+
+CREATE TABLE language (
+	country VARCHAR(2), 
+	language VARCHAR(30) NOT NULL, 
+	percentage FLOAT, 
+	PRIMARY KEY (country, language), 
+	FOREIGN KEY(country) REFERENCES country (code)
+);
+
+CREATE TABLE population (
+	country VARCHAR(2), 
+	population INTEGER, 
+	children FLOAT, 
+	adult FLOAT, 
+	birth_rate FLOAT, 
+	death_rate FLOAT, 
+	sex_ratio FLOAT, 
+	PRIMARY KEY (country), 
+	FOREIGN KEY(country) REFERENCES country (code)
+);
+```
+
 **Table Country:**
  * code (key)
  * name
