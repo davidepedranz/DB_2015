@@ -121,11 +121,21 @@ AND e.poverty_rate > (SELECT poverty_rate FROM economy WHERE country = 'IT')
 ```
 
 **6. Find the country with the fastest declining population (that is the maximum death_rate - birth_rate).**
+
+Assuming it is unique...
 ```sql
-SELECT *
+SELECT country
 FROM population
 ORDER BY death_rate - birth_rate DESC
 LIMIT 1
+```
+
+If not unique:
+```sql
+SELECT country
+FROM population
+WHERE death_rate - birth_rate = ( SELECT MAX(death_rate - birth_rate)
+								  FROM population )
 ```
 
 **7. For each language, find the percentage of the world population that speaks it.**
