@@ -194,13 +194,7 @@ WHERE NOT EXISTS ( SELECT *
 
 **13. Find the pids of parts supplied by every supplier at less then 100. (If any supplier either does not supply the part or charges more than 100 for it, the part is not selected.)**
 ``` sql
-SELECT p.pidSELECT c1.sid, c1.pid
-FROM catalog c1 NATURAL JOIN (
-				 SELECT s.sid, MAX(c.cost) AS cost
-				 FROM suppliers s NATURAL JOIN catalog c
-				 WHERE s.sname = 'All red'
-				 GROUP BY s.sid
-			     );
+SELECT p.pid
 FROM parts p
 WHERE NOT EXISTS ( SELECT *
                    FROM suppliers s
