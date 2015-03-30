@@ -84,6 +84,13 @@ WHERE NOT EXISTS ( SELECT *
                                       FROM catalog c1
                                       WHERE C1.sid = C.sid AND C1.pid = p.pid ));
 ```
+or
+```sql
+SELECT DISTINCT c.sid FROM catalog c
+WHERE NOT EXISTS ( SELECT p1.pid FROM parts p1 
+				   EXCEPT
+				   SELECT c2.pid FROM catalog c2 WHERE c2.sid = c.sid)
+```
 
 **6. Find the sids of suppliers who supply every red part**
 ```sql
@@ -95,6 +102,13 @@ WHERE NOT EXISTS ( SELECT *
                    AND NOT EXISTS ( SELECT *
                                     FROM catalog c1
                                     WHERE c.sid = c1.sid AND p.pid = c1.pid ))
+```
+or
+```sql
+SELECT DISTINCT c.sid FROM catalog c
+WHERE NOT EXISTS ( SELECT p1.pid FROM parts p1 WHERE p1.color='red' 
+				   EXCEPT
+				   SELECT c2.pid FROM catalog c2 WHERE c2.sid = c.sid)
 ```
 
 **7. Find the sids of suppliers who supply every red and every green part**
