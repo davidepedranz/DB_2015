@@ -19,3 +19,11 @@ The folder [countries](countries) contains:
   * a python script to create the schema and insert dummy data
   * the sqlite database generated runnning the script
   * a markdown file containing the questions with a possible answer
+
+## University
+Yet another SQL exercise.
+
+The folder [university](university) contains:
+  * a python script to create the schema and insert dummy data
+  * the sqlite database generated runnning the script
+  * a markdown file containing the questions with a possible answer (TODO)
